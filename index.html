@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vigenère Cipher</title>
+</head>
+<body>
+  <h1>Vigenère Cipher</h1>
+  <p>Enter a message and a key to encode or decode:</p>
+  <form>
+    <label for="message">Message:</label><br>
+    <input type="text" id="message" name="message"><br>
+    <label for="key">Key:</label><br>
+    <input type="text" id="key" name="key"><br><br>
+    <button type="button" onclick="encode()">Encode</button>
+    <button type="button" onclick="decode()">Decode</button>
+  </form> 
+  <p>Result: <span id="result"></span></p>
+  <script>
+    function vigenere(str, key, decode) {
+      // Make sure the key is the same length as the message
+      while (key.length < str.length) {
+        key += key;
+      }
+      key = key.slice(0, str.length);
+
+      // Encode or decode the message
+      let result = "";
+      for (let i = 0; i < str.length; i++) {
+        let c = str[i];
+        let k = key[i];
+        if (c >= "A" && c <= "Z") {
+          if (decode) {
+            c = (c.charCodeAt(0) - k.charCodeAt(0) + 26) % 26 + 65;
+          } else {
+            c = (c.charCodeAt(0) + k.charCodeAt(0) - 2 * 65) % 26 + 65;
+          }
+        } else if (c >= "a" && c <= "z") {
+          if (decode) {
+            c = (c.charCodeAt(0) - k.charCodeAt(0) + 26) % 26 + 97;
+          } else {
+            c = (c.charCodeAt(0) + k.charCodeAt(0) - 2 * 97) % 26 + 97;
+          }
+        }
+        result += String.fromCharCode(c);
+      }
+      return result;
+    }
+
+    function encode() {
+      let message = document.getElementById("message").value;
+      let key = document.getElementById("key").value;
+      let result = vigenere(message, key, false);
+      document.getElementById("result").innerHTML = result;
+    }
+
+    function decode() {
+      let message = document.getElementById("message").value;
+      let key = document.getElementById("key").value;
+      let result = vigenere(message, key, true);
+      document.getElementById("result").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
